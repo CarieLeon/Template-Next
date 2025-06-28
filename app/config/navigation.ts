@@ -1,5 +1,4 @@
-import { FooterNavigation, NavigationSection } from "@/types/navigation";
-import { NavigationItem } from "@/app/types/navigation";
+import { FooterNavigation, NavigationSection, NavigationItem } from "@/types/navigation";
 
 export const mainNavigation: NavigationSection[] = [
   {
