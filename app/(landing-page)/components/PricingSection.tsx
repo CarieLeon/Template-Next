@@ -103,7 +103,7 @@ export function PricingSection() {
                             </ul>
 
                             <button className="w-full py-4 bg-black text-white rounded-2xl hover:bg-gray-800 transition-all font-medium">
-                                Commencer l'essai gratuit
+                                Commencer l&apos;essai gratuit
                             </button>
                         </div>
                     </motion.div>

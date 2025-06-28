@@ -52,11 +52,11 @@ export default function AdminPage() {
                     transition={{ delay: 0.1 }}
                     className="bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 p-6"
                 >
-                    <h3 className="text-lg font-medium text-white mb-4">Informations de l'établissement</h3>
+                    <h3 className="text-lg font-medium text-white mb-4">Informations de l&apos;établissement</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label className="block text-sm font-medium text-gray-400 mb-2">
-                                Nom de l'établissement
+                                Nom de l&apos;établissement
                             </label>
                             <input
                                 type="text"
@@ -128,7 +128,7 @@ export default function AdminPage() {
                         </div>
                         <div className="md:col-span-2">
                             <label className="block text-sm font-medium text-gray-400 mb-2">
-                                Horaires d'ouverture
+                                Horaires d&apos;ouverture
                             </label>
                             <input
                                 type="text"

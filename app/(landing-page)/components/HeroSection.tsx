@@ -68,7 +68,7 @@ export function HeroSection() {
           </div>
           <div>
             <div className="text-4xl font-bold text-primary mb-2">14 jours</div>
-            <div className="text-text-secondary">d'essai gratuit</div>
+            <div className="text-text-secondary">d&apos;essai gratuit</div>
           </div>
           <div>
             <div className="text-4xl font-bold text-primary mb-2">100%</div>
