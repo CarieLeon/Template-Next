@@ -1,9 +1,0 @@
-echo "Pre-Commit hook go brrrrrr 🚀"
-
-npm exec lint-staged
-if [ $? -ne 0 ]; then
-  echo "Lint-staged failed bro ❌☠️"
-fi
-
-echo "Pre-Commit hook done ✅🚀"
-echo "OTSUKARE-SAMA ! Commit complete. Sir ! 🫡"

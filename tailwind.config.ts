@@ -8,8 +8,9 @@
 
 /** @type {import('tailwindcss').Config} */
 const { nextui } = require("@nextui-org/react");
+import type { Config } from "tailwindcss";
 
-module.exports = {
+const config: Config = {
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -33,8 +34,23 @@ module.exports = {
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
       colors: {
-        primary: "#E95652",
-        secondary: "#FFF9F9",
+        primary: {
+          DEFAULT: '#000000', // Noir principal
+          light: '#1a1a1a',   // Noir plus clair pour les hovers
+        },
+        secondary: {
+          DEFAULT: '#ffffff', // Blanc principal
+          dark: '#f3f4f6',    // Blanc cassé pour les sections alternées
+        },
+        text: {
+          primary: '#000000',   // Texte noir principal
+          secondary: '#4b5563', // Texte gris pour les paragraphes
+          light: '#ffffff',     // Texte blanc pour les fonds sombres
+        },
+        accent: {
+          DEFAULT: '#000000', // Noir pour les accents
+          hover: '#1a1a1a',   // Noir plus clair pour les hovers
+        },
         tertiary: "#FFE4E3",
         black: "#000000",
         white: "#FFFFFF",
@@ -104,3 +120,5 @@ module.exports = {
   ],
   darkMode: "class",
 };
+
+export default config;

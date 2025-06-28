@@ -1,4 +1,5 @@
 import { FooterNavigation, NavigationSection } from "@/types/navigation";
+import { NavigationItem } from "@/app/types/navigation";
 
 export const mainNavigation: NavigationSection[] = [
   {
@@ -70,3 +71,10 @@ export const footerNavigation: FooterNavigation = {
     { name: "Wiki interne", href: "/wiki" },
   ],
 };
+
+export const navigation: NavigationItem[] = [
+  { name: "Fonctionnalités", href: "#features" },
+  { name: "Démo", href: "#demo" },
+  { name: "Tarifs", href: "#pricing" },
+  { name: "Contact", href: "#contact" },
+];

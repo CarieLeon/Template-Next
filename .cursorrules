@@ -1,10 +1,85 @@
 # Cursor rules
 
-Décrivez ici votre projet globalement très brievement. Puis votre Stack, puis les parties techniques du code souhaitées
+Cahier des charges – WebApp Carte de Fidélité 100% Digitale
 
-Our stack is Next.js, TailwindCSS, Nextui, SASS, @iconify/react and Framer Motion.
-Please use TSX (Typescript) with well typed code every time you generate code and react arrow function components.
-Never use `React.FN` and never use `React.FC`, just type props.
-Please use as much as possible the packages
+ Pitch du projet,
+
+Créer une application web responsive qui permet à n’importe quel petit commerce (boulangerie, coiffeur, épicerie, etc.) d’avoir sa propre carte de fidélité digitale, sans avoir besoin de développer une app dédiée. L’objectif est de remplacer les cartes physiques par une solution SaaS abordable, simple à utiliser et distribuée avec kit physique (QR, stickers…).
+
+ Utilisateurs cibles
+• Clients finaux : consommateurs qui scannent leur QR code pour cumuler des points et voir leurs récompenses.
+• Commerçants / Entreprises : interface d’administration pour scanner des QR codes, voir les historiques, définir les règles de fidélité et suivre les statistiques.,
+
+ Fonctionnalités attendues,
+
+ Interface Entreprise
+• Connexion sécurisée
+• Tableau de bord du commerce
+• Création d’un programme de fidélité :
+• X points par achat / passage
+• Récompenses configurables (ex : 1 café offert après 10 points)
+• Scanner un QR client pour créditer des points
+• Suivi de la base client (noms, points cumulés, dernières visites…)
+• Suivi des récompenses utilisées
+• Statistiques : nombre de passages, points cumulés, cadeaux distribués
+• Génération automatique de QR codes clients
+• Téléchargement du kit (stickers, présentoir QR, etc.)
+
+ Interface Client
+• Connexion simple (email/code QR)
+• Affichage de son QR code personnel (à scanner par le commerçant)
+• Suivi de ses points par commerce
+• Affichage des récompenses atteintes
+• Liste des commerces partenaires
+• Interface responsive, simple et rapide
+
+ Tech Stack proposée
+• Frontend : Nextjs
+• Backend : Nestjs
+• ORM : Drizzle / Prisma
+• Database : Supabase
+• Deployment : Vercel
+• Auth : Supabase auth ou JWT
+• QR Code : Lib JS comme qrcode.react ou API dédiée
+• Hébergement : Vercel
+• Optionnel : Admin Panel low-code via Supabase ou React Admin,
+
+ Responsive & UX/UI
+• Mobile-first (80% des commerçants/clients utiliseront mobile/tablette)
+• Dark/Light mode si possible
+• UI épurée, moderne, accessible (gros boutons, animations douces)
+• Présentation claire de la fidélité : points restants, prochaine récompense,
+
+ Sécurité
+• Authentification sécurisée (Firebase / OAuth / Email Code)
+• Anti-fraude (limiter les scans manuels / abus)
+• Logging des actions (scan, gain de point, cadeau offert)
+• Dashboard entreprise non accessible sans compte validé
+• RGPD-friendly (aucune info sensible collectée sans consentement),
+
+ Business Model
+• Abonnement mensuel pour commerçants (~35€/mois)
+• 14 jours d’essai gratuits
+• Pack physique envoyé au 1er paiement :
+• Présentoir QR
+• Stickers QR personnalisés
+• Notice,
+
+ Estimation de charge
+•  LP marketing : 2-3 jours
+•  Auth + base structure : 2 jours
+•  Interface client : 2-3 jours
+•  Interface entreprise : 4-6 jours
+•  QR code + logique fidélité : 2-3 jours
+•  Statistiques + export : 2 jours
+•  Sécurité + tests : 2-3 jours
+•  Total estimé (MVP) : ~15-20 jours/homme,
+
+ Étapes de développement
+Validation marché : test de la demande via LP + contact terrain,
+Build MVP : interface client + commerçant (base),
+Beta fermée : 10 à 20 commerçants testeurs,
+Scaling : kit physique + support + amélioration continue
+always repond in french
 
 Always respond in Français
