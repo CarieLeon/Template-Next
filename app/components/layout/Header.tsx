@@ -4,8 +4,8 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { usePathname } from "next/navigation";
-import { navigation } from "../../../config/navigation";
-import { cn } from "../../../utils/cn";
+import { navigation } from "@config/navigation";
+import { cn } from "@utils/cn";
 
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
