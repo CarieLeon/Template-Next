@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { MdiChevronLeft } from "@/assets/icons/mdi-chevron-left";
-import { cn } from "@/utils/cn";
+import { cn } from "@utils/cn";
 
 export const BreadcrumbHomepage = ({ className }: { className?: string }) => {
   return (
