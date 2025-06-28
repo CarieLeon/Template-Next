@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Line } from 'react-chartjs-2';
 import {
     Chart as ChartJS,
@@ -13,6 +13,9 @@ import {
     Tooltip,
     Legend
 } from 'chart.js';
+import { Customer, Reward } from "@/types/customer";
+import { RewardsSelector } from "./RewardsSelector";
+import { RewardsManager } from "./RewardsManager";
 
 ChartJS.register(
     CategoryScale,
@@ -24,41 +27,130 @@ ChartJS.register(
     Legend
 );
 
-type Client = {
-    id: string;
-    nom: string;
-    points: number;
-    derniereVisite: string;
-};
+const defaultRewards: Reward[] = [
+    {
+        id: "1",
+        name: "Café offert",
+        description: "Un café de votre choix gratuit",
+        pointsRequired: 50,
+        isRedeemed: false
+    },
+    {
+        id: "2",
+        name: "Réduction 10%",
+        description: "10% de réduction sur votre prochain achat",
+        pointsRequired: 100,
+        isRedeemed: false
+    },
+    {
+        id: "3",
+        name: "Produit gratuit",
+        description: "Un produit gratuit au choix parmi une sélection",
+        pointsRequired: 200,
+        isRedeemed: false
+    }
+];
 
 export function DemoSection() {
-    const [clients, setClients] = useState<Client[]>([
-        { id: '1', nom: 'Sophie Martin', points: 45, derniereVisite: '2024-03-15' },
-        { id: '2', nom: 'Thomas Bernard', points: 30, derniereVisite: '2024-03-14' },
-        { id: '3', nom: 'Marie Dubois', points: 25, derniereVisite: '2024-03-13' },
+    const [availableRewards, setAvailableRewards] = useState<Reward[]>(defaultRewards);
+    const [clients, setClients] = useState<Customer[]>([
+        {
+            id: "1",
+            firstName: "Sophie",
+            lastName: "Martin",
+            email: "sophie.martin@example.com",
+            points: 45,
+            rewards: [...defaultRewards],
+            lastVisit: "2024-03-15"
+        },
+        {
+            id: "2",
+            firstName: "Thomas",
+            lastName: "Bernard",
+            email: "thomas.bernard@example.com",
+            points: 30,
+            rewards: [...defaultRewards],
+            lastVisit: "2024-03-14"
+        },
+        {
+            id: "3",
+            firstName: "Marie",
+            lastName: "Dubois",
+            email: "marie.dubois@example.com",
+            points: 25,
+            rewards: [...defaultRewards],
+            lastVisit: "2024-03-13"
+        },
     ]);
 
-    const [nouveauClient, setNouveauClient] = useState({ nom: '' });
+    const [selectedClient, setSelectedClient] = useState<Customer | null>(null);
+    const [nouveauClient, setNouveauClient] = useState({ nom: "" });
+    const [showRewards, setShowRewards] = useState<string | null>(null);
+
+    const handleRewardsUpdate = (newRewards: Reward[]) => {
+        setAvailableRewards(newRewards);
+        // Mettre à jour les récompenses pour tous les clients
+        setClients(clients.map(client => ({
+            ...client,
+            rewards: newRewards.map(reward => ({
+                ...reward,
+                isRedeemed: client.rewards.find(r => r.id === reward.id)?.isRedeemed || false
+            }))
+        })));
+    };
+
+    const handleRewardSelect = (clientId: string, reward: Reward) => {
+        setClients(clients.map(client => {
+            if (client.id === clientId) {
+                return {
+                    ...client,
+                    rewards: client.rewards.map(r =>
+                        r.id === reward.id
+                            ? { ...r, isRedeemed: true, redeemedAt: new Date().toISOString() }
+                            : r
+                    )
+                };
+            }
+            return client;
+        }));
+        setShowRewards(null);
+    };
 
     const ajouterClient = () => {
         if (nouveauClient.nom.trim()) {
-            const newClient: Client = {
+            const [firstName, lastName] = nouveauClient.nom.split(" ");
+            const newClient: Customer = {
                 id: (clients.length + 1).toString(),
-                nom: nouveauClient.nom,
+                firstName: firstName || nouveauClient.nom,
+                lastName: lastName || "",
+                email: `${nouveauClient.nom.toLowerCase().replace(" ", ".")}@example.com`,
                 points: 0,
-                derniereVisite: new Date().toISOString().split('T')[0],
+                rewards: [...availableRewards],
+                lastVisit: new Date().toISOString().split("T")[0],
             };
             setClients([...clients, newClient]);
-            setNouveauClient({ nom: '' });
+            setNouveauClient({ nom: "" });
         }
     };
 
-    const ajouterPoints = (clientId: string) => {
-        setClients(clients.map(client =>
-            client.id === clientId
-                ? { ...client, points: client.points + 5, derniereVisite: new Date().toISOString().split('T')[0] }
-                : client
-        ));
+    const ajouterPoints = (clientId: string, points: number = 5) => {
+        setClients(clients.map(client => {
+            if (client.id === clientId) {
+                const newPoints = client.points + points;
+                const updatedRewards = client.rewards.map(reward => ({
+                    ...reward,
+                    isRedeemed: reward.isRedeemed || (newPoints >= reward.pointsRequired)
+                }));
+
+                return {
+                    ...client,
+                    points: newPoints,
+                    rewards: updatedRewards,
+                    lastVisit: new Date().toISOString().split("T")[0]
+                };
+            }
+            return client;
+        }));
     };
 
     // Données pour le graphique
@@ -127,16 +219,30 @@ export function DemoSection() {
                 </motion.div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    {/* Graphique */}
-                    <motion.div
-                        initial={{ opacity: 0, x: -20 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                        className="bg-white border border-gray-200 p-6 rounded-xl shadow-sm"
-                    >
-                        <h3 className="text-xl font-semibold mb-4 text-black">Évolution des points</h3>
-                        <Line data={chartData} options={chartOptions} />
-                    </motion.div>
+                    {/* Graphique et Configuration des récompenses */}
+                    <div className="space-y-8">
+                        <motion.div
+                            initial={{ opacity: 0, x: -20 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true }}
+                            className="bg-white border border-gray-200 p-6 rounded-xl shadow-sm"
+                        >
+                            <h3 className="text-xl font-semibold mb-4 text-black">Évolution des points</h3>
+                            <Line data={chartData} options={chartOptions} />
+                        </motion.div>
+
+                        <motion.div
+                            initial={{ opacity: 0, x: -20 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true }}
+                            className="bg-white border border-gray-200 p-6 rounded-xl shadow-sm"
+                        >
+                            <RewardsManager
+                                rewards={availableRewards}
+                                onRewardsUpdate={handleRewardsUpdate}
+                            />
+                        </motion.div>
+                    </div>
 
                     {/* Liste des clients */}
                     <motion.div
@@ -167,26 +273,55 @@ export function DemoSection() {
                         {/* Liste des clients */}
                         <div className="space-y-4">
                             {clients.map((client) => (
-                                <div
+                                <motion.div
                                     key={client.id}
-                                    className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-100"
+                                    className="flex flex-col p-4 bg-gray-50 rounded-lg border border-gray-100"
                                 >
-                                    <div>
-                                        <h4 className="font-medium text-black">{client.nom}</h4>
-                                        <p className="text-sm text-gray-600">
-                                            Dernière visite : {client.derniereVisite}
-                                        </p>
+                                    <div className="flex items-center justify-between mb-2">
+                                        <div>
+                                            <h4 className="font-medium text-black">
+                                                {client.firstName} {client.lastName}
+                                            </h4>
+                                            <p className="text-sm text-gray-600">
+                                                Dernière visite : {client.lastVisit}
+                                            </p>
+                                        </div>
+                                        <div className="flex items-center gap-4">
+                                            <span className="font-semibold text-black">{client.points} pts</span>
+                                            <button
+                                                onClick={() => ajouterPoints(client.id)}
+                                                className="px-3 py-1 bg-black text-white text-sm rounded-lg hover:bg-gray-800 transition-colors"
+                                            >
+                                                +5 pts
+                                            </button>
+                                        </div>
                                     </div>
-                                    <div className="flex items-center gap-4">
-                                        <span className="font-semibold text-black">{client.points} pts</span>
-                                        <button
-                                            onClick={() => ajouterPoints(client.id)}
-                                            className="px-3 py-1 bg-black text-white text-sm rounded-lg hover:bg-gray-800 transition-colors"
-                                        >
-                                            +5 pts
-                                        </button>
+
+                                    {/* Aperçu des récompenses */}
+                                    <div className="mt-2">
+                                        <div className="flex items-center justify-between">
+                                            <div className="text-sm font-medium text-gray-600">
+                                                {client.rewards.filter(r => r.isRedeemed).length} récompense(s) utilisée(s)
+                                            </div>
+                                            <button
+                                                onClick={() => setShowRewards(showRewards === client.id ? null : client.id)}
+                                                className="text-sm text-black hover:text-gray-600 transition-colors"
+                                            >
+                                                {showRewards === client.id ? "Masquer" : "Voir les récompenses"}
+                                            </button>
+                                        </div>
                                     </div>
-                                </div>
+
+                                    {/* Sélecteur de récompenses */}
+                                    <AnimatePresence>
+                                        {showRewards === client.id && (
+                                            <RewardsSelector
+                                                client={client}
+                                                onRewardSelect={(reward) => handleRewardSelect(client.id, reward)}
+                                            />
+                                        )}
+                                    </AnimatePresence>
+                                </motion.div>
                             ))}
                         </div>
                     </motion.div>
