@@ -26,20 +26,20 @@ export function Header() {
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
-        "bg-white border-b border-gray-100",
-        isScrolled ? "shadow-sm" : ""
+        "fixed left-0 right-0 top-0 z-50 transition-all duration-300",
+        "border-b border-gray-100 bg-white",
+        isScrolled ? "shadow-sm" : "",
       )}
     >
-      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+      <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <Link href="/" className="text-xl font-bold text-black">
             FidélitéPro
           </Link>
 
           {/* Navigation principale */}
-          <div className="hidden md:flex space-x-8">
+          <div className="hidden space-x-8 md:flex">
             {navigation.map((item) => (
               <Link
                 key={item.name}
@@ -48,7 +48,7 @@ export function Header() {
                   "text-sm font-medium transition-colors",
                   pathname === item.href
                     ? "text-black"
-                    : "text-gray-600 hover:text-black"
+                    : "text-gray-600 hover:text-black",
                 )}
               >
                 {item.name}
@@ -56,16 +56,27 @@ export function Header() {
             ))}
           </div>
 
-          {/* Bouton Essai gratuit */}
-          <Link
-            href="/essai-gratuit"
-            className={cn(
-              "px-4 py-2 text-sm font-medium rounded-lg transition-colors",
-              "bg-black text-white hover:bg-gray-800"
-            )}
-          >
-            Essai gratuit
-          </Link>
+          {/* Boutons d'authentification */}
+          <div className="flex items-center space-x-4">
+            <Link
+              href="/connexion"
+              className={cn(
+                "rounded-lg px-4 py-2 text-sm font-medium transition-colors",
+                "text-gray-700 hover:bg-gray-100 hover:text-black",
+              )}
+            >
+              Connexion
+            </Link>
+            <Link
+              href="/inscription"
+              className={cn(
+                "rounded-lg px-4 py-2 text-sm font-medium transition-colors",
+                "bg-black text-white hover:bg-gray-800",
+              )}
+            >
+              Créer un compte
+            </Link>
+          </div>
         </div>
       </nav>
     </motion.header>
